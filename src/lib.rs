@@ -10,6 +10,7 @@
     feature(core_intrinsics)
 )]
 #![cfg_attr(feature = "panic-handler", feature(thread_local))]
+#![cfg_attr(feature = "fde-deferred", feature(linkage))]
 #![warn(rust_2018_idioms)]
 #![warn(unsafe_op_in_unsafe_fn)]
 #![no_std]

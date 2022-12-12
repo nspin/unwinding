@@ -6,6 +6,8 @@ mod gnu_eh_frame_hdr;
 mod phdr;
 #[cfg(feature = "fde-registry")]
 mod registry;
+#[cfg(feature = "fde-deferred")]
+mod deferred;
 
 use crate::util::*;
 use gimli::{BaseAddresses, EhFrame, FrameDescriptionEntry};
@@ -39,6 +41,10 @@ impl FDEFinder for GlobalFinder {
         }
         #[cfg(feature = "fde-static")]
         if let Some(v) = fixed::get_finder().find_fde(pc) {
+            return Some(v);
+        }
+        #[cfg(feature = "fde-deferred")]
+        if let Some(v) = deferred::get_finder().find_fde(pc) {
             return Some(v);
         }
         None
