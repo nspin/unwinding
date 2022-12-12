@@ -7,8 +7,8 @@ license = "MIT OR Apache-2.0"
 description = "Unwinding library in Rust and for Rust"
 repository = "https://github.com/nbdd0121/unwinding/"
 
-[workspace]
-members = ["cdylib", "example"]
+# [workspace]
+# members = ["cdylib", "example"]
 
 [dependencies]
 gimli = { version = "0.26.1", default-features = false, features = ["read-core"] }

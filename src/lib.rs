@@ -1,4 +1,4 @@
-#![doc = include_str!("../README.md")]
+// #![doc = include_str!("../README.md")]
 #![feature(c_unwind)]
 #![feature(naked_functions)]
 #![cfg_attr(
