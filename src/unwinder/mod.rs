@@ -10,8 +10,12 @@ use crate::abi::*;
 use crate::arch::*;
 use crate::util::*;
 use arch::*;
-use find_fde::FDEFinder;
 use frame::Frame;
+
+pub use find_fde::{FDEFinder, FDESearchResult};
+
+#[cfg(feature = "fde-custom")]
+pub use find_fde::{set_custom_fde_finder, BaseAddressFinder, SetCustomFDEFinderError};
 
 #[repr(C)]
 pub struct UnwindException {

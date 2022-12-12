@@ -20,6 +20,14 @@ extern crate alloc;
 #[cfg(feature = "unwinder")]
 mod unwinder;
 
+#[cfg(all(feature = "unwinder", feature = "fde-custom"))]
+pub mod custom_fde_finder {
+    pub use super::unwinder::{
+        set_custom_fde_finder, BaseAddressFinder, FDEFinder, FDESearchResult,
+        SetCustomFDEFinderError,
+    };
+}
+
 pub mod abi;
 
 mod arch;
