@@ -45,6 +45,7 @@ pub struct Frame {
 
 impl Frame {
     pub fn from_context(ctx: &Context, signal: bool) -> Result<Option<Self>, gimli::Error> {
+        sel4_panicking_env::debug_println!("from_context 1");
         let mut ra = ctx[Arch::RA];
 
         // Reached end of stack
@@ -57,11 +58,20 @@ impl Frame {
             ra -= 1;
         }
 
+        sel4_panicking_env::debug_println!("from_context ff");
         let fde_result = match find_fde::get_finder().find_fde(ra as _) {
             Some(v) => v,
             None => return Ok(None),
         };
-        let mut unwinder = UnwindContext::<_, StoreOnStack>::new_in();
+        sel4_panicking_env::print_sp("fc");
+        sel4_panicking_env::debug_println!("from_context gg");
+        let sz = size_of::<UnwindContext::<gimli::EndianSlice<'_, gimli::LittleEndian>, StoreOnStack>>();
+        sel4_panicking_env::debug_println!("from_context gg2");
+        sel4_panicking_env::debug_println!("from_context size {:#x?}", sz);
+        let mut unwinder = UnwindContext::<gimli::EndianSlice<'_, gimli::LittleEndian>, StoreOnStack>::new_in();
+        sel4_panicking_env::debug_println!("from_context ctx: {:#x?}", core::ptr::addr_of!(unwinder));
+        sel4_panicking_env::debug_println!("from_context hh");
+        sel4_panicking_env::print_sp("fc2");
         let row = fde_result
             .fde
             .unwind_info_for_address(
@@ -72,6 +82,7 @@ impl Frame {
             )?
             .clone();
 
+        sel4_panicking_env::debug_println!("from_context end");
         Ok(Some(Self { fde_result, row }))
     }
 

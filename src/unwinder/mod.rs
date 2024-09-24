@@ -133,7 +133,10 @@ macro_rules! try1 {
     ($e: expr) => {{
         match $e {
             Ok(v) => v,
-            Err(_) => return UnwindReasonCode::FATAL_PHASE1_ERROR,
+            Err(_) => {
+                sel4_panicking_env::debug_println!("fatal 1");
+                return UnwindReasonCode::FATAL_PHASE1_ERROR
+            }
         }
     }};
 }
@@ -153,12 +156,16 @@ pub unsafe extern "C-unwind" fn _Unwind_RaiseException(
     exception: *mut UnwindException,
 ) -> UnwindReasonCode {
     with_context(|saved_ctx| {
+        sel4_panicking_env::debug_println!("xxx 1");
         // Phase 1: Search for handler
         let mut ctx = saved_ctx.clone();
         let mut signal = false;
         loop {
+            sel4_panicking_env::debug_println!("xxx 2");
             if let Some(frame) = try1!(Frame::from_context(&ctx, signal)) {
+                sel4_panicking_env::debug_println!("xxx 2.1");
                 if let Some(personality) = frame.personality() {
+                    sel4_panicking_env::debug_println!("xxx 2.2");
                     let result = unsafe {
                         personality(
                             1,
@@ -185,6 +192,7 @@ pub unsafe extern "C-unwind" fn _Unwind_RaiseException(
                 ctx = try1!(frame.unwind(&ctx));
                 signal = frame.is_signal_trampoline();
             } else {
+                sel4_panicking_env::debug_println!("yyy 2");
                 return UnwindReasonCode::END_OF_STACK;
             }
         }
@@ -196,6 +204,7 @@ pub unsafe extern "C-unwind" fn _Unwind_RaiseException(
             (*exception).private_2 = handler_cfa;
         }
 
+        sel4_panicking_env::debug_println!("xxx 3");
         let code = raise_exception_phase2(exception, saved_ctx, handler_cfa);
         match code {
             UnwindReasonCode::INSTALL_CONTEXT => unsafe { restore_context(saved_ctx) },
@@ -211,6 +220,7 @@ fn raise_exception_phase2(
 ) -> UnwindReasonCode {
     let mut signal = false;
     loop {
+        sel4_panicking_env::debug_println!("xxx 4");
         if let Some(frame) = try2!(Frame::from_context(ctx, signal)) {
             let frame_cfa = ctx[Arch::SP] - signal as usize;
             if let Some(personality) = frame.personality() {
