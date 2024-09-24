@@ -3,14 +3,6 @@
 version = 3
 
 [[package]]
-name = "catch_std_exception"
-version = "0.1.0"
-dependencies = [
- "libc",
- "unwinding",
-]
-
-[[package]]
 name = "compiler_builtins"
 version = "0.1.101"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -52,22 +44,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
 
 [[package]]
-name = "std_catch_exception"
-version = "0.1.0"
-dependencies = [
- "libc",
- "unwinding",
-]
-
-[[package]]
-name = "throw_and_catch"
-version = "0.1.0"
-dependencies = [
- "libc",
- "unwinding",
-]
-
-[[package]]
 name = "unwinding"
 version = "0.2.1"
 dependencies = [
@@ -76,12 +52,4 @@ dependencies = [
  "libc",
  "rustc-std-workspace-core",
  "spin",
-]
-
-[[package]]
-name = "unwinding_dyn"
-version = "0.1.0"
-dependencies = [
- "libc",
- "unwinding",
 ]
